@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import TodoItem from './TodoItem';
 
 class TodoList extends Component {
@@ -14,20 +14,27 @@ class TodoList extends Component {
     this.handleBtnClick = this.handleBtnClick.bind(this);
   }
   handleInputChange(e) {
-    this.setState({
-      inputValue: e.target.value
+    const value = e.target.value;
+    this.setState(() => {
+      return {
+        inputValue: value
+      };
     });
   }
   handleBtnClick() {
-    this.setState({
-      list: [...this.state.list, this.state.inputValue],
-      inputValue: ''
+    this.setState((preState) => {
+      return {
+        list: [...preState.list, preState.inputValue],
+        inputValue: ''
+      };
     });
   }
   handleDelete(index) {
-    const list = [...this.state.list];
-    list.splice(index, 1);
-    this.setState({ list });
+    this.setState((preState) => {
+      const list = [...preState.list];
+      list.splice(index, 1);
+      return { list };
+    });
   }
   getTodoItem() {
     return (
@@ -47,16 +54,17 @@ class TodoList extends Component {
   //子组件通过props接收父组件传过来的参数
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <div>
+          <label>请输入</label>
           <input value={this.state.inputValue} onChange={this.handleInputChange} />
-          <button className='red-btn' onClick={this.handleBtnClick}>add</button>
+          <button className='red-btn' onClick={this.handleBtnClick}>提交</button>
           <span>hello fang</span>
         </div>
         <ul>
           {this.getTodoItem()}
         </ul>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }
